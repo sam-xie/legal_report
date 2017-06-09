@@ -1,17 +1,20 @@
 import urllib2
 import bs4
+import re
 from bs4 import BeautifulSoup
 from util import jsonhelper
 
 
-host = "www.23us.com"
-param = "/html/49/49803/20035454.html"
-url = "http://" + host + '/' + param
+REGEX_HTTP_HEAD = r"https?://"
+DEF_HTTP_HEAD = r"http://"
 
 NEXT_URL_IDX_IN_FT = 2
 
-def handle(url, target):
-	resp = urllib2.urlopen(url)
+def handle(host, query, target):
+	print re.match(REGEX_HTTP_HEAD, host)
+	if None == re.match(REGEX_HTTP_HEAD, host):
+		host = DEF_HTTP_HEAD + host
+	resp = urllib2.urlopen(host + '/' + query)
 	html = resp.read()
 	soup = BeautifulSoup(html)
 
@@ -41,6 +44,3 @@ def handle(url, target):
 
 	# print ret
 	return ret
-
-if __name__ == '__main__':
-	handle(url, None)
